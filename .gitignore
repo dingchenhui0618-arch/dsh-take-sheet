@@ -1,0 +1,18 @@
+node_modules/
+*.log
+
+# 本机凭据一律不入库
+.env
+.env.*
+.npmrc
+*.pem
+*.key
+*.p12
+*.pfx
+
+# 构建/调试临时产物
+.tmp/
+out/
+*.mp4
+*.mov
+*.webm

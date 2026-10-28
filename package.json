@@ -1,0 +1,68 @@
+{
+  "name": "dsh-take-sheet",
+  "version": "0.1.0",
+  "engines": { "dsh": ">=0.2.1-rc.2 <0.3.0" },
+  "description": "Turn a reference video into a human-curated shot list: shot-boundary detection, thumbnails, checkbox selection, and an exportable timecoded frame manifest plus a labelled contact sheet.",
+  "type": "module",
+  "main": "lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./client": "./lib/client.js",
+    "./cordis.patch.yml": "./cordis.patch.yml",
+    "./locale/*.json": "./locale/*.json",
+    "./icon": "./icon.svg",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib",
+    "cordis.patch.yml",
+    "locale/*.json",
+    "icon.svg",
+    "docs",
+    "screenshots.json",
+    "README.md",
+    "CHANGELOG.md",
+    "SECURITY.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "node --test test/*.test.mjs",
+    "prepack": "node scripts/build.mjs"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "inject": [
+        "@deepseek-ai/dsh-client-runtime",
+        "@deepseek-ai/dsh-client-ui-conversation",
+        "@deepseek-ai/dsh-client-ui-layout"
+      ],
+      "platform": "web"
+    }
+  },
+  "keywords": [
+    "deepseek-harness",
+    "dsh",
+    "dsh-plugin",
+    "video",
+    "shot-detection",
+    "contact-sheet",
+    "reference-frames",
+    "storyboard"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dingchenhui0618-arch/dsh-take-sheet.git"
+  },
+  "homepage": "https://github.com/dingchenhui0618-arch/dsh-take-sheet#readme",
+  "bugs": {
+    "url": "https://github.com/dingchenhui0618-arch/dsh-take-sheet/issues"
+  },
+  "license": "MIT"
+}
