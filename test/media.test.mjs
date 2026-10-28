@@ -81,7 +81,7 @@ test('detect reports a version-gated failure and then recovers after reset', asy
 test('scene detection is one argv array, scdet-only, with no shell string', () => {
   const args = sceneDetectArgs('D:\\refs\\a b.mp4', 'D:\\jobs\\j1', { threshold: 6, frameWidth: 720 })
   assert.ok(args.includes('D:\\refs\\a b.mp4'))
-  assert.ok(args.includes('D:\\jobs\\j1\\cut-%04d.jpg'))
+  assert.ok(args.includes(join('D:\\jobs\\j1', 'cut-%04d.jpg')))
   assert.ok(args.includes('scdet=threshold=6:sc_pass=1,showinfo,scale=720:-2'))
   assert.ok(args.includes('-fps_mode'))
   assert.ok(!args.some((arg) => /[;&|]/.test(arg)), 'arguments stay data, never a command line')

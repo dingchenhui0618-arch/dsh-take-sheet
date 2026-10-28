@@ -12,7 +12,7 @@
 import { spawn } from 'node:child_process'
 import { copyFileSync, existsSync, mkdirSync, readdirSync, renameSync, rmSync } from 'node:fs'
 import { homedir } from 'node:os'
-import { dirname, join } from 'node:path'
+import { dirname, join, posix, win32 } from 'node:path'
 import {
   LIMITS,
   clampInt,
@@ -91,6 +91,10 @@ function envPath(env) {
 export function binaryCandidates(kind, env, platform) {
   const environment = env || process.env
   const os = platform || process.platform
+  // Probe paths belong to the target platform, not to the host running the
+  // test. Without this, a Linux test that asks for win32 candidates gets
+  // forward slashes and never matches the Windows layout under test.
+  const sep = os === 'win32' ? win32 : posix
   const exe = os === 'win32' ? kind + '.exe' : kind
   const explicit = kind === 'ffmpeg'
     ? environment.DSH_FFMPEG_PATH || environment.FFMPEG_PATH
@@ -99,13 +103,13 @@ export function binaryCandidates(kind, env, platform) {
   if (explicit) list.push(explicit)
   if (os === 'win32') {
     if (environment.LOCALAPPDATA) {
-      list.push(join(environment.LOCALAPPDATA, 'Microsoft', 'WinGet', 'Links', exe))
+      list.push(sep.join(environment.LOCALAPPDATA, 'Microsoft', 'WinGet', 'Links', exe))
     }
     list.push('C:\\ffmpeg\\bin\\' + exe)
     list.push('C:\\ProgramData\\chocolatey\\bin\\' + exe)
-    for (const dir of envPath(environment).split(';')) if (dir.trim()) list.push(join(dir.trim(), exe))
+    for (const dir of envPath(environment).split(';')) if (dir.trim()) list.push(sep.join(dir.trim(), exe))
   } else {
-    for (const dir of envPath(environment).split(':')) if (dir.trim()) list.push(join(dir.trim(), exe))
+    for (const dir of envPath(environment).split(':')) if (dir.trim()) list.push(sep.join(dir.trim(), exe))
     list.push('/opt/homebrew/bin/' + kind, '/usr/local/bin/' + kind, '/usr/bin/' + kind)
   }
   return list
